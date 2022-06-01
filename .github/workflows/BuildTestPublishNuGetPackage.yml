@@ -32,6 +32,9 @@ jobs:
     - name: Restore packages
       run: dotnet restore
       
+    - name: Test Test
+      run: dotnet test ${{ inputs.solution }} --configuration:${{ inputs.build_config }} --no-build --verbosity normal
+      
     - name: Build
       run: dotnet build ${{ inputs.solution }} --configuration:${{ inputs.build_config }} --no-restore
       
