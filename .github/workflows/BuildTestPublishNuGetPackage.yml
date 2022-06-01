@@ -36,7 +36,7 @@ jobs:
       run: dotnet build ${{ inputs.solution }} --configuration ${{ inputs.build_config }} --no-restore
       
     - name: Test
-      run: dotnet test --configuration --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal
 
     - name: Package
       run: dotnet pack ${{ inputs.solution }} --configuration ${{ inputs.build_config }} -o:${{ env.output_folder }}
