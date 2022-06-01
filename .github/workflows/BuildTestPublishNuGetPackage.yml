@@ -33,13 +33,13 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build ${{ inputs.solution }} --configuration ${{ inputs.build_config }} --no-restore
+      run: dotnet build ${{ inputs.solution }} --configuration:${{ inputs.build_config }} --no-restore
       
     - name: Test
-      run: dotnet test --configuration ${{ inputs.build_config }} --no-build --verbosity normal
+      run: dotnet test ${{ inputs.solution }} --configuration:${{ inputs.build_config }} --no-build --verbosity normal
 
     - name: Package
-      run: dotnet pack ${{ inputs.solution }} --configuration ${{ inputs.build_config }} -o:${{ env.output_folder }}
+      run: dotnet pack ${{ inputs.solution }} --configuration:${{ inputs.build_config }} -o:${{ env.output_folder }}
 
     - name: Publish
       run: dotnet nuget push ${{ env.output_folder }}/*.nupkg --source https://nuget.pkg.github.com/mdekok/index.json --api-key ${{ secrets.pat }}
