@@ -1,0 +1,26 @@
+name: 'Tailwind minify'
+description: 'Generates minified css file based on Tailwind CSS'
+
+inputs:
+  npm-folder:
+    required: true
+    description: 'NPM folder container package.json, tailwind.config.js, etc.'
+  script:
+    required: true
+    description: 'Name of script to run defined in packages.json'
+    
+runs:
+  using: 'composite'
+  steps:
+    - name: Node setup
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+          
+    - name: Install packages
+      working-directory: ${{ inputs.npm-folder }} # LrtWebsite/Tailwind
+      run: npm ci
+        
+    - name: Generate minimized tailwind.css file
+      working-directory: ${{ inputs.npm-folder }} # LrtWebsite/Tailwind
+      run: npm run ${{ inputs.script }} # build-prod
