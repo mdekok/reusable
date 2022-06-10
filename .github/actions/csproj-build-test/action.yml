@@ -20,4 +20,6 @@ runs:
       shell: bash
       run: dotnet build ${{ inputs.project }} --configuration Release --output publish-folder # --no-restore
 
-    - run: echo ${{ fromJSON(inputs.tests)[0] }}
+    - name: Test
+      shell: bash
+      run: echo ${{ fromJSON(inputs.tests)[0] }}
