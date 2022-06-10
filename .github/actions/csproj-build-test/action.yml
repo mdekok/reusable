@@ -5,6 +5,8 @@ inputs:
   project:
     required: true
     description: 'Project to build.'
+  tests:
+    description: 'List of test project files as json array'
   
 runs:
   using: 'composite'
@@ -17,3 +19,5 @@ runs:
     - name: Build
       shell: bash
       run: dotnet build ${{ inputs.project }} --configuration Release --output publish-folder # --no-restore
+
+    - run: echo ${{ fromJSON(inputs.tests)[0] }}
