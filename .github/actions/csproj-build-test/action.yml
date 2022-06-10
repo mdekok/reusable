@@ -15,4 +15,5 @@ runs:
         dotnet-version: 6.0.x
 
     - name: Build
+      shell: bash
       run: dotnet build ${{ inputs.project }} --configuration Release --output publish-folder # --no-restore
