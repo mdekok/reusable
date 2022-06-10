@@ -1,0 +1,13 @@
+name: 'Test project or solution'
+
+inputs:
+  target:
+    required: true
+    description: 'Project or solution to test.'
+  
+runs:
+  using: 'composite'
+  steps:
+    - name: Test
+      shell: bash
+      run: dotnet test ${{ inputs.target }} --configuration Release
