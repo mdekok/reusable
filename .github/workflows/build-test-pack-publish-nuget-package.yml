@@ -1,0 +1,32 @@
+name: Build, test, pack and publish NuGet package
+
+on:
+  workflow_call:
+    inputs:
+      solution:
+        required: true
+        type: string
+    secrets:
+      pat:
+        required: true
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      output_folder: ${{ github.workspace }}/output
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Build and test
+      uses: mdekok/reusable/.github/actions/dotnet-build-test@v0.4.3
+      with:
+        target: ${{ inputs.solution }}
+
+    - name: Pack and publish
+      uses: mdekok/reusable/.github/actions/dotnet-pack-publish@v0.4.3
+      with:
+        solution: ${{ inputs.solution }}
