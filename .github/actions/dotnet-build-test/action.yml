@@ -1,0 +1,22 @@
+name: 'Build and test project or solution'
+
+inputs:
+  target:
+    required: true
+    description: 'Project or solution to build and test.'
+  
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Build
+      shell: bash
+      run: dotnet build ${{ inputs.target }} --configuration Release --output publish-folder
+      
+    - name: Test
+      shell: bash
+      run: dotnet test ${{ inputs.target }} --no-build
