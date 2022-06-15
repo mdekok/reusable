@@ -27,4 +27,4 @@ jobs:
       uses: mdekok/reusable/.github/actions/dotnet-pack-publish@main
       with:
         solution: ${{ inputs.solution }}
-        pat: $${{ secrets.pat }}
+        pat: ${{ secrets.pat }}
