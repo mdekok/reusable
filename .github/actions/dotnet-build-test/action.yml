@@ -19,4 +19,4 @@ runs:
       
     - name: Test
       shell: bash
-      run: dotnet test ${{ inputs.target }} --no-build
+      run: dotnet test ${{ inputs.target }} --configuration Release --no-build
