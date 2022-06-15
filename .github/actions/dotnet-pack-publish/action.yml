@@ -7,11 +7,12 @@ inputs:
   pat:
     required: true
     description: 'Personal Access Token to push package.'
+    
+env:
+  output_folder: ${{ github.workspace }}/output
   
 runs:
   using: 'composite'
-  env:
-    output_folder: ${{ github.workspace }}/output
   steps:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
