@@ -1,0 +1,21 @@
+name: Build and test NuGet package
+
+on:
+  workflow_call:
+    inputs:
+      solution:
+        required: true
+        type: string
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Build and test
+      uses: mdekok/reusable/.github/actions/dotnet-build-test@main
+      with:
+        target: ${{ inputs.solution }}
