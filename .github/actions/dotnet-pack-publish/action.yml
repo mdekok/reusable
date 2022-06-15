@@ -15,8 +15,8 @@ runs:
   steps:
     - name: Package
       shell: bash
-      run: dotnet pack ${{ inputs.solution }} --configuration ${{ inputs.build_config }} -o:${{ env.output_folder }}
+      run: dotnet pack ${{ inputs.solution }} --configuration Release --output ${{ env.output_folder }}
 
     - name: Publish
       shell: bash
-      run: dotnet nuget push ${{ env.output_folder }}/*.nupkg --source https://nuget.pkg.github.com/mdekok/index.json --api-key ${{ secrets.pat }}    
+      run: dotnet nuget push ${{ env.output_folder }}/*.nupkg --source https://nuget.pkg.github.com/mdekok/index.json --api-key ${{ secrets.pat }}
