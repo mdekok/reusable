@@ -6,9 +6,6 @@ on:
       solution:
         required: true
         type: string
-      build_config:
-        required: true
-        type: string
     secrets:
       pat:
         required: true
@@ -23,24 +20,13 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v3
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+
+    - name: Build and test
+      uses: mdekok/reusable/.github/actions/dotnet-build-test@v0.4.1
       with:
-        dotnet-version: 6.0.x
-    
-    - name: Restore packages
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build ${{ inputs.solution }} --configuration ${{ inputs.build_config }} --no-restore
-      
-    - name: Test
-      run: dotnet test ${{ inputs.solution }} --configuration ${{ inputs.build_config }} --no-build --verbosity normal
+        target: ${{ inputs.solution }}
 
-    - name: Package
-      run: dotnet pack ${{ inputs.solution }} --configuration ${{ inputs.build_config }} -o:${{ env.output_folder }}
-
-    - name: Publish
-      run: dotnet nuget push ${{ env.output_folder }}/*.nupkg --source https://nuget.pkg.github.com/mdekok/index.json --api-key ${{ secrets.pat }}
-    
+    - name: Pack and publish
+      uses: mdekok/reusable/.github/actions/dotnet-pack-publish@v0.4.1
+      with:
+        solution: ${{ inputs.solution }}
