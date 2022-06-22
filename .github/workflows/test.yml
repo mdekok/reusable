@@ -16,13 +16,14 @@ on:
 
 env:
   Environment: ${{ github.event.inputs.Environment }}
-  x: ${env.Environment:-Gelukt}
+  x: ${Environment:-Gelukt}
   
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      - run: echo "Environment={Environment:-ViaRun}" >> $GITHUB_ENV
       - run: echo $Environment
       - run: echo $x
       - run: echo ${Environment:-TochGelukt}
