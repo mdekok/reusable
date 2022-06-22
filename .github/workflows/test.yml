@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "Environment={Environment:-ViaRun}" >> $GITHUB_ENV
+      - run: echo "Environment=${Environment:-ViaRun}" >> $GITHUB_ENV
       - run: echo $Environment
       - run: echo $x
       - run: echo ${Environment:-TochGelukt}
