@@ -12,7 +12,7 @@ on:
         - Test
         - Production
   schedule:
-    - cron: '0 1 * * *' # 01:00 UTC
+    - cron: '* * * * *' # 01:00 UTC
 
 env:
   Environment: ${{ github.event.inputs.Environment }}
