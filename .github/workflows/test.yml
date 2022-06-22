@@ -15,7 +15,7 @@ on:
     - cron: '0 1 * * *' # 01:00 UTC
 
 env:
-  Environment: ${{ github.event.inputs.Environment:-Gelukt }}
+  Environment: ${{ github.event.inputs.Environment }}
   x: ${env.Environment:-Gelukt}
   
 jobs:
