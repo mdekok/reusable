@@ -25,3 +25,4 @@ jobs:
     steps:
       - run: echo $Environment
       - run: echo $x
+      - run: echo ${Environment:-TochGelukt}
