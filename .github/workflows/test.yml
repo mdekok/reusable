@@ -15,7 +15,7 @@ on:
     - cron: '0 1 * * *' # 01:00 UTC
 
 env:
-  Environment: ${{ github.event.inputs.Environment }}
+  Environment: $github.event.inputs.Environment
   
 jobs:
   test:
