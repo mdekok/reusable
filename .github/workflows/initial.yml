@@ -1,4 +1,4 @@
-name: Name of workflow
+name: Starter workflow
 
 on:
   workflow_dispatch:
@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - run: echo "Dummy workflow for testing initial development in branch"
+    - run: echo "Starter workflow for testing initial development of workflow in branch"
     - run: exit 1 # Exit in error to indicate this workflow should by overwritten
