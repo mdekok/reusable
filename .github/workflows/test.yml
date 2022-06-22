@@ -2,11 +2,24 @@ name: Test
 
 on:
   workflow_dispatch:
+    inputs:
+      Environment:
+        default: Test
+        required: true
+        type: choice
+        options:
+        - Development
+        - Test
+        - Production
+  schedule:
+    - cron: '0 1 * * *' # 01:00 UTC
 
+env:
+  Environment: ${{ github.event.inputs.Environment }}
+  
 jobs:
-  warning:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - run: echo "Starter workflow for testing initial development of workflow in branch"
-    - run: exit 1 # Exit in error to indicate this workflow should by overwritten
+      - run: echo $Environment
