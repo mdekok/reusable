@@ -1,6 +1,5 @@
 # reusable
-Repository for reusable items like Reusable Workflows.
+Repository for reusable items.
 
-Reusable Workflows: https://www.youtube.com/watch?v=lRypYtmbKMs
-
-Reusable Workflows has a limitation (2022-6): repository containing reusable workflows needs to be public.
+- [Actions](.github/actions)
+- [Reusable workflows](.github/workflows)
