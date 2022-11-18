@@ -24,7 +24,7 @@ jobs:
         target: ${{ inputs.solution }}
 
     - name: Pack and publish
-      uses: mdekok/reusable/.github/actions/dotnet-pack-publish@v1.0.0
+      uses: mdekok/reusable/.github/actions/dotnet-pack-publish@v1.0.4
       with:
         solution: ${{ inputs.solution }}
         pat: ${{ secrets.pat }}
