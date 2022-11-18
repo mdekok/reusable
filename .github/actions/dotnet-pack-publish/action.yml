@@ -22,4 +22,4 @@ runs:
 
     - name: Publish
       shell: bash
-      run: dotnet nuget push publish_folder/*.nupkg --source https://nuget.pkg.github.com/mdekok/index.json --api-key ${{ inputs.pat }}
+      run: dotnet nuget push publish_folder/*.nupkg --source https://nuget.pkg.github.com/mdekok --api-key ${{ inputs.pat }}
