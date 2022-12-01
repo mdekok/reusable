@@ -19,12 +19,12 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Build and test
-      uses: mdekok/reusable/.github/actions/dotnet-build-test@v1.0.0
+      uses: mdekok/reusable/.github/actions/dotnet-build-test@v1.1.0
       with:
         target: ${{ inputs.solution }}
 
     - name: Pack and publish
-      uses: mdekok/reusable/.github/actions/dotnet-pack-publish@v1.0.4
+      uses: mdekok/reusable/.github/actions/dotnet-pack-publish@v1.1.0
       with:
         solution: ${{ inputs.solution }}
         pat: ${{ secrets.pat }}
