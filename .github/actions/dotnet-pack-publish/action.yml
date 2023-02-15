@@ -1,9 +1,9 @@
 name: 'Pack and publish NuGet package'
 
 inputs:
-  solution:
+  project:
     required: true
-    description: 'Solution to pack and publish.'
+    description: 'Project to pack and publish.'
   pat:
     required: true
     description: 'Personal Access Token to push package.'
@@ -18,7 +18,7 @@ runs:
         
     - name: Package
       shell: bash
-      run: dotnet pack ${{ inputs.solution }} --configuration Release --output publish_folder
+      run: dotnet pack ${{ inputs.project }} --configuration Release --output publish_folder
 
     - name: Publish
       shell: bash
