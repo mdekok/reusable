@@ -18,11 +18,11 @@ runs:
         node-version: 16
           
     - name: Install packages
-      working-directory: ${{ inputs.npm-folder }} # LrtWebsite/Tailwind
+      working-directory: ${{ inputs.npm-folder }}
       shell: bash
       run: npm ci
         
     - name: Generate minimized tailwind.css file
-      working-directory: ${{ inputs.npm-folder }} # LrtWebsite/Tailwind
+      working-directory: ${{ inputs.npm-folder }}
       shell: bash
       run: npm run ${{ inputs.script }} # build-prod
