@@ -17,9 +17,7 @@ runs:
         dotnet-version: 8.0.x
         
     - name: Package
-      shell: bash
       run: dotnet pack ${{ inputs.project }} --configuration Release --output publish_folder
 
     - name: Publish
-      shell: bash
       run: dotnet nuget push publish_folder/*.nupkg --source https://nuget.pkg.github.com/mdekok --api-key ${{ inputs.pat }}
