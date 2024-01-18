@@ -14,5 +14,4 @@ runs:
         dotnet-version: 8.0.x
 
     - name: Build
-      shell: bash
       run: dotnet build ${{ inputs.target }} --configuration Release --output publish-folder
