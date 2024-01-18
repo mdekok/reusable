@@ -9,5 +9,4 @@ runs:
   using: 'composite'
   steps:
     - name: Test
-      shell: bash
       run: dotnet test ${{ inputs.target }} --configuration Release
