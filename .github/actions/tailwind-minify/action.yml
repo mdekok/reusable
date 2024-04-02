@@ -14,8 +14,6 @@ runs:
   steps:
     - name: Node setup
       uses: actions/setup-node@v4.0.2
-      with:
-        node-version: 16
           
     - name: Install packages
       working-directory: ${{ inputs.npm-folder }}
