@@ -16,4 +16,4 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Linter
-      run: az bicep build --file ${{ inputs.solution }}
+      run: az bicep build --file ${{ inputs.filepath }}
