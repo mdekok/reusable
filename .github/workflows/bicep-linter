@@ -1,0 +1,19 @@
+name: Lint Bicep file
+
+on:
+  workflow_call:
+    inputs:
+      filepath:
+        required: true
+        type: string
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v4
+
+    - name: Linter
+      run: az bicep build --file ${{ inputs.solution }}
