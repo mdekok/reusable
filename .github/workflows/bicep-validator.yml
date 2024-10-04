@@ -6,10 +6,6 @@ on:
       environment:
         required: true
         type: string
-      location:
-        default: 'westeurope'
-        required: true
-        type: string
         
 jobs:
   validate:
@@ -17,7 +13,6 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-    - run: echo ${{ inputs.Location }}
     - name: Check out
       uses: actions/checkout@v4
 
@@ -35,4 +30,4 @@ jobs:
           az deployment group validate \
             --template-file ./Tools/Bicep/main.bicep \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --parameters environment="${{ vars.Label }}" location=${{ inputs.Location }}
+            --parameters environment="${{ vars.Label }}" location=${{ vars.Location }}
