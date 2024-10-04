@@ -17,6 +17,7 @@ jobs:
 #    environment: ${{ inputs.environment }}
 
     steps:
+    - run: echo "Location ${{ inputs.Location }}"
     - name: Check out
       uses: actions/checkout@v4
 
