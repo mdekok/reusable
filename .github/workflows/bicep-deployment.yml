@@ -1,4 +1,4 @@
-name: Deployment Bicep file
+name: Deploy Bicep file
 
 on:
   workflow_call:
