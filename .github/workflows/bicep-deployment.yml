@@ -7,7 +7,7 @@ on:
         description: 'Deployment action: validate, what-if or create'
         required: true
         type: string
-      file-path:
+      filepath:
         required: true
         type: string
       environment:
@@ -35,6 +35,6 @@ jobs:
         azcliversion: 2.63.0 # See: https://github.com/Azure/azure-cli/issues/29828
         inlineScript: |
           az deployment group ${{ inputs.environment }} \
-            --template-file ${{ inputs.file-path }} \
+            --template-file ${{ inputs.filepath }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --parameters environment=${{ vars.LABEL }} location=${{ vars.LOCATION }}
