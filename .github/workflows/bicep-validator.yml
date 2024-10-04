@@ -30,4 +30,4 @@ jobs:
           az deployment group validate \
             --template-file ./Tools/Bicep/main.bicep \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --parameters environment="${{ vars.Label }}" location=${{ vars.Location }}
+            --parameters environment=${{ vars.Label }} location=${{ vars.Location }}
