@@ -1,0 +1,40 @@
+name: Deploy Bicep file
+
+on:
+  workflow_call:
+    inputs:
+      action:
+        description: 'Deployment action: validate, what-if or create'
+        required: true
+        type: string
+      file-path:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+        
+jobs:
+  what-if:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v4
+
+    - uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: What-if deployment
+      uses: azure/CLI@v2
+      with:
+        azcliversion: 2.63.0 # See: https://github.com/Azure/azure-cli/issues/29828
+        inlineScript: |
+          az deployment group ${{ inputs.environment }} \
+            --template-file ${{ inputs.file-path }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --parameters environment=${{ vars.LABEL }} location=${{ vars.LOCATION }}
