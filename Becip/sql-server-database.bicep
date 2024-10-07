@@ -1,19 +1,22 @@
-@description('The name of the SQL logical server.')
+@description('Name of the SQL logical server.')
 param serverName string
 
-@description('The name of the SQL Database.')
+@description('Name of the SQL Database.')
 param databaseName string
 
 @description('Location for all resources.')
 param location string
 
-@description('The administrator username of the SQL logical server.')
+@description('Administrator username of the SQL logical server.')
 @secure()
 param administratorLogin string
 
-@description('The administrator password of the SQL logical server.')
+@description('Administrator password of the SQL logical server.')
 @secure()
 param administratorLoginPassword string
+
+@description('Id of the User Assigned Identity.')
+param userAssignedIdentityId string
 
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   name: serverName
@@ -21,6 +24,12 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
+  }
+  identity: {
+      type: 'UserAssigned'
+      userAssignedIdentities: {
+        '${userAssignedIdentityId}': {}
+      }
   }
 }
 
