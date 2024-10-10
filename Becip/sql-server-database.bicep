@@ -18,12 +18,33 @@ param administratorLoginPassword string
 @description('Id of the User Assigned Identity.')
 param userAssignedIdentityId string
 
+@description('Local IP address to allow access to the SQL server.')
+param localIpAddress string
+
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   name: serverName
   location: location
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
+  }
+}
+
+resource firewallRulesAzure 'Microsoft.Sql/servers/firewallRules@2023-08-01-preview' = {
+  name: '${serverName}-allow-azure-to-access'
+  parent: sqlServer
+  properties: {
+    endIpAddress: '0.0.0.0' // magic ip address to allow all azure services to acces this server
+    startIpAddress: '0.0.0.0'
+  }
+}
+
+resource firewallRulesLocal 'Microsoft.Sql/servers/firewallRules@2023-08-01-preview' = {
+  name: '${serverName}-allow-local-ip'
+  parent: sqlServer
+  properties: {
+    endIpAddress: localIpAddress
+    startIpAddress: localIpAddress
   }
 }
 
