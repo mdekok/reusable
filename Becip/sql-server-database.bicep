@@ -40,7 +40,7 @@ resource firewallRulesAzure 'Microsoft.Sql/servers/firewallRules@2023-08-01-prev
 }
 
 resource firewallRulesLocal 'Microsoft.Sql/servers/firewallRules@2023-08-01-preview' = {
-  name: '${serverName}-allow-local-ip'
+  name: '${serverName}-allow-local-ip-to-access'
   parent: sqlServer
   properties: {
     endIpAddress: localIpAddress
