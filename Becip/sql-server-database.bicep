@@ -30,6 +30,17 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   }
 }
 
+resource administrator 'Microsoft.Sql/servers/administrators@2023-08-01-preview' = {
+  name: '${serverName}-administrator'
+  parent: sqlServer
+  properties: {
+    administratorType: 'ActiveDirectory'
+    login: administratorLogin
+    sid: 'cd86b88e-7516-4538-8173-37390325fb59'
+    tenantId: subscription().tenantId
+  }
+}
+
 resource firewallRulesAzure 'Microsoft.Sql/servers/firewallRules@2023-08-01-preview' = {
   name: '${serverName}-allow-azure-to-access'
   parent: sqlServer
