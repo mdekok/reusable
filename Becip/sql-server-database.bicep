@@ -29,7 +29,7 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
     administratorLoginPassword: administratorLoginPassword
     administrators: {
       administratorType: 'ActiveDirectory'
-      login: administratorLogin
+      login: 'info@micheldekok.nl'
       principalType: 'User'
       sid: 'cd86b88e-7516-4538-8173-37390325fb59'
       tenantId: subscription().tenantId
