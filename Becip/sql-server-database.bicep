@@ -31,7 +31,7 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
 }
 
 resource administrator 'Microsoft.Sql/servers/administrators@2023-08-01-preview' = {
-  name: '${serverName}-administrator'
+  name: 'ActiveDirectory'
   parent: sqlServer
   properties: {
     administratorType: 'ActiveDirectory'
