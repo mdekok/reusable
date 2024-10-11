@@ -27,17 +27,13 @@ resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
-  }
-}
-
-resource administrator 'Microsoft.Sql/servers/administrators@2023-08-01-preview' = {
-  name: 'ActiveDirectory'
-  parent: sqlServer
-  properties: {
-    administratorType: 'ActiveDirectory'
-    login: administratorLogin
-    sid: 'cd86b88e-7516-4538-8173-37390325fb59'
-    tenantId: subscription().tenantId
+    administrators: {
+      administratorType: 'ActiveDirectory'
+      login: administratorLogin
+      principalType: 'User'
+      sid: 'cd86b88e-7516-4538-8173-37390325fb59'
+      tenantId: subscription().tenantId
+    }
   }
 }
 
