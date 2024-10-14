@@ -4,9 +4,6 @@ param serverName string
 @description('Name of the SQL Database.')
 param databaseName string
 
-@description('Location for all resources.')
-param location string
-
 @description('Administrator username of the SQL logical server.')
 @secure()
 param administratorLogin string
@@ -15,15 +12,12 @@ param administratorLogin string
 @secure()
 param administratorLoginPassword string
 
-@description('Id of the User Assigned Identity.')
-param userAssignedIdentityId string
-
 @description('Local IP address to allow access to the SQL server.')
 param localIpAddress string
 
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   name: serverName
-  location: location
+  location: resourceGroup().location
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
@@ -58,7 +52,7 @@ resource firewallRulesLocal 'Microsoft.Sql/servers/firewallRules@2023-08-01-prev
 resource sqlDB 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
   parent: sqlServer
   name: databaseName
-  location: location
+  location: resourceGroup().location
   sku: {
     name: 'GP_S_Gen5' // S indicates serverless
     tier: 'GeneralPurpose'
@@ -70,11 +64,3 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
     maxSizeBytes: 1073741824 // 1 GB max storage
   }
 }
-
-#disable-next-line no-hardcoded-env-urls
-var server = 'Server=${serverName}.database.windows.net'
-var db = 'Database=${databaseName}'
-var user = 'User Id=${userAssignedIdentityId}'
-
-output connectionString string = '${server};${db};${user};Authentication=Active Directory Managed Identity;Encrypt=True;'
-
