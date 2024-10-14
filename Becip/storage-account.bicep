@@ -3,13 +3,16 @@
 @maxLength(24)
 param name string
 
+@description('Location of resource')
+param location string = resourceGroup().location
+
 @description('Sku name.')
 @allowed(['Standard_GRS', 'Standard_LRS'])
 param sku string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: name
-  location: resourceGroup().location
+  location: location
   sku: {
     name: sku
   }
