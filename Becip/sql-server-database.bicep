@@ -69,12 +69,6 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
     autoPauseDelay: 15 // minutes
     maxSizeBytes: 1073741824 // 1 GB max storage
   }
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentityId}': {}
-    }
-  }
 }
 
 #disable-next-line no-hardcoded-env-urls

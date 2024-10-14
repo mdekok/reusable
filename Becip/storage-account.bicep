@@ -10,8 +10,8 @@ param location string
 @allowed(['Standard_GRS', 'Standard_LRS'])
 param sku string
 
-@description('Id of the User Assigned Identity.')
-param userAssignedIdentityId string
+@description('PricipleId of the User Assigned Identity.')
+param principalId string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: name
@@ -20,10 +20,16 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     name: sku
   }
   kind: 'StorageV2'
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${userAssignedIdentityId}': {}
-    }
+}
+
+var contributorRoleDefinition = 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+
+resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid('${name}-roleassignment') // name must be a GUID
+  scope: storageAccount
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', contributorRoleDefinition)
+    principalId: principalId
+    principalType: 'ServicePrincipal'
   }
 }
