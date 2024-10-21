@@ -28,7 +28,7 @@ var useAzureManagedDomain = customDomain == ''
 resource emailServiceAzureDomain 'Microsoft.Communication/emailServices/domains@2023-04-01' =
 if (useAzureManagedDomain) {
   parent: emailCommuncationServices
-  name: '${name}-managed-domain'
+  name: 'AzureManagedDomain'
   location: 'global'
   properties: {
     domainManagement: 'AzureManaged'
@@ -41,7 +41,7 @@ if (useAzureManagedDomain) {
 resource emailServiceCustomDomain 'Microsoft.Communication/emailServices/domains@2023-04-01' =
 if (!useAzureManagedDomain) {
   parent: emailCommuncationServices
-  name: '${name}-custom-domain'
+  name: customDomain
   location: 'global'
   properties: {
     domainManagement: 'CustomerManaged'
@@ -52,7 +52,7 @@ if (!useAzureManagedDomain) {
 resource senderEmailServiceCustomDomain 'Microsoft.Communication/emailServices/domains/senderUsernames@2023-04-01' =
 if (!useAzureManagedDomain) {
   parent: emailServiceCustomDomain
-  name: '${name}-custom-domain-sender'
+  name: customDomainUserName
   properties: {
     username: customDomainUserName
     displayName: customDomainDisplayName
