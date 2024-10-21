@@ -35,6 +35,10 @@ param blobStorageUrl string
 @secure()
 param communicationConnectionString string
 
+@description('Email sender address.')
+@secure()
+param emailSenderAddress string
+
 @description('Security key.')
 @secure()
 param securityKey string
@@ -92,6 +96,10 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
           value: communicationConnectionString
         }
         {
+          name: 'email-sender-address-ref'
+          value: emailSenderAddress
+        }
+        {
           name: 'security-key-ref'
           value: securityKey
         }
@@ -139,6 +147,10 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
             {
               name: 'ConnectionStrings__Communication'
               secretRef: 'communication-connection-ref'
+            }
+            {
+              name: 'EmailSenderAddress'
+              secretRef: 'email-sender-address-ref'
             }
             {
               name: 'SecurityKey'

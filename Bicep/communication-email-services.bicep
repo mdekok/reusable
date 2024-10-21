@@ -62,3 +62,7 @@ if (!useAzureManagedDomain) {
 output emailDomainResourceId string = useAzureManagedDomain 
   ? emailServiceAzureDomain.id 
   : emailServiceCustomDomain.id
+
+output emailSenderAddress string = useAzureManagedDomain
+  ? 'DoNotReply@${emailServiceAzureDomain.properties.fromSenderDomain}'
+  : '${customDomainUserName}@${customDomain}'
