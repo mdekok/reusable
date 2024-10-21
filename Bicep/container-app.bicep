@@ -16,6 +16,9 @@ param logAnalyticsWorkspaceCustomerId string
 @description('Log Analytics Workspace name.')
 param logAnalyticsWorkspaceName string
 
+@description('Image (ghcr.io/mdekok/bsapp:{version})')
+param image string
+
 @description('GitHub Container Registry read token.')
 @secure()
 param ghcrReadToken string
@@ -115,7 +118,7 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
       containers: [
         {
           name: '${name}-container'
-          image: 'ghcr.io/mdekok/bsapp:v2425.2.3'
+          image: image
           resources: {
             cpu: json('0.25')
             memory: '.5Gi'
