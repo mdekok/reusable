@@ -1,6 +1,9 @@
 @description('Name of the Email Communication Services.')
 param name string
 
+@description('Tags for the resource.')
+param tags object
+
 @description('Use Custom Domain. Empty string creates Azure Managed Domain.')
 param customDomain string = ''
 
@@ -16,6 +19,7 @@ param customDomainDisplayName string = 'DoNotReply'
 resource emailCommuncationServices 'Microsoft.Communication/emailServices@2023-04-01' = {
   name: name
   location: 'global'
+  tags: tags
   properties: {
     dataLocation: 'Europe'
   }
@@ -30,6 +34,7 @@ if (useAzureManagedDomain) {
   parent: emailCommuncationServices
   name: 'AzureManagedDomain'
   location: 'global'
+  tags: tags
   properties: {
     domainManagement: 'AzureManaged'
     userEngagementTracking: 'Disabled'
@@ -43,6 +48,7 @@ if (!useAzureManagedDomain) {
   parent: emailCommuncationServices
   name: customDomain
   location: 'global'
+  tags: tags
   properties: {
     domainManagement: 'CustomerManaged'
     userEngagementTracking: 'Disabled'

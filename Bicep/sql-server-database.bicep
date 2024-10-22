@@ -4,6 +4,9 @@ param serverName string
 @description('Location of resource')
 param location string = resourceGroup().location
 
+@description('Tags for the resource.')
+param tags object
+
 @description('Name of the SQL Database.')
 param databaseName string
 
@@ -21,6 +24,7 @@ param localIpAddress string
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
   name: serverName
   location: location
+  tags: tags
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
@@ -56,6 +60,7 @@ resource sqlDB 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
   parent: sqlServer
   name: databaseName
   location: location
+  tags: tags
   sku: {
     name: 'GP_S_Gen5' // S indicates serverless
     tier: 'GeneralPurpose'

@@ -4,6 +4,9 @@ param name string
 @description('Location of resource')
 param location string = resourceGroup().location
 
+@description('Tags for the resource.')
+param tags object
+
 @description('Id of the User Assigned Managed Identity.')
 param userAssignedManagedIdentityId string
 
@@ -50,6 +53,7 @@ param syncfusionLicenseKey string
 resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: '${name}-environment'
   location: location
+  tags: tags
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
@@ -74,6 +78,7 @@ resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
 resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
   name: name
   location: location
+  tags: tags
   properties: {
     environmentId: environment.id
     configuration: {
