@@ -4,14 +4,8 @@ param name string
 @description('Tags for the resource.')
 param tags object
 
-@description('Use Custom Domain. Empty string creates Azure Managed Domain.')
-param customDomain string = ''
-
-@description('Custom Domain User Name.')
-param customDomainUserName string = 'DoNotReply'
-
-@description('Custom Domain Display Name.')
-param customDomainDisplayName string = 'DoNotReply'
+@description('Domain settings. Object with domain, userName and displayName properties.')
+param domainSettings object = {}
 
 // https://medium.com/medialesson/deploying-azure-email-communication-service-with-bicep-e52954c47b7
 // https://medium.com/medialesson/how-to-send-emails-at-scale-in-net-with-the-azure-communication-service-14565d84147f
@@ -25,7 +19,7 @@ resource emailCommuncationServices 'Microsoft.Communication/emailServices@2023-0
   }
 }
 
-var useAzureManagedDomain = customDomain == ''
+var useAzureManagedDomain = !contains(domainSettings, 'domain')
 
 // ========== Azure Managed Domain
 
@@ -43,10 +37,14 @@ if (useAzureManagedDomain) {
 
 // ========== Custom Managed Domain
 
+var domain = domainSettings.?domain ?? ''
+var userName = domainSettings.?userName ?? 'DoNotReply'
+var displayName = domainSettings.?displayName ?? 'Do not reply'
+
 resource emailServiceCustomDomain 'Microsoft.Communication/emailServices/domains@2023-04-01' =
 if (!useAzureManagedDomain) {
   parent: emailCommuncationServices
-  name: customDomain
+  name: domain
   location: 'global'
   tags: tags
   properties: {
@@ -58,10 +56,10 @@ if (!useAzureManagedDomain) {
 resource senderEmailServiceCustomDomain 'Microsoft.Communication/emailServices/domains/senderUsernames@2023-04-01' =
 if (!useAzureManagedDomain) {
   parent: emailServiceCustomDomain
-  name: customDomainUserName
+  name: userName
   properties: {
-    username: customDomainUserName
-    displayName: customDomainDisplayName
+    username: userName
+    displayName: displayName
   }
 }
 
@@ -71,4 +69,4 @@ output emailDomainResourceId string = useAzureManagedDomain
 
 output emailSenderAddress string = useAzureManagedDomain
   ? 'DoNotReply@${emailServiceAzureDomain.properties.fromSenderDomain}'
-  : '${customDomainUserName}@${customDomain}'
+  : '${userName}@${domain}'
