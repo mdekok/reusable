@@ -57,7 +57,7 @@ var appSecrets = [
 ]
 var appSecretRefs = [for secret in secretRefs: {
     name: secret.envVar
-    secretRef: '${secret.key}-ref'
+    secretRef: '${secret.name}-ref'
   }]
 
 resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
