@@ -26,29 +26,39 @@ param image string
 @secure()
 param ghcrReadToken string
 
-@description('Sql database connection string.')
-@secure()
-param sqlConnectionString string
+@description('Environment variables.')
+param env array = []
 
-@description('Blob Storage URL.')
+// Bicep does not allow secure array parameters
+// https://github.com/Azure/bicep/issues/8733
+// Also getSecrets has restrictions, so using secretN is is a workaround for now.
 @secure()
-param blobStorageUrl string
+param secret1 string = ''
+@secure()
+param secret2 string = ''
+@secure()
+param secret3 string = ''
+@description('Secret references.')
+param secretRefs array = []
 
-@description('Communication connection string.')
-@secure()
-param communicationConnectionString string
-
-@description('Email sender address.')
-@secure()
-param emailSenderAddress string
-
-@description('Security key.')
-@secure()
-param securityKey string
-
-@description('Syncfusion license key.')
-@secure()
-param syncfusionLicenseKey string
+var appSecrets = [
+  {
+    name: 'secret1-ref'
+    value: secret1
+  }
+  {
+    name: 'secret2-ref'
+    value: secret2
+  }
+  {
+    name: 'secret3-ref'
+    value: secret3
+  }
+]
+var appSecretRefs = [for secret in secretRefs: {
+    name: secret.envVar
+    secretRef: '${secret.key}-ref'
+  }]
 
 resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: '${name}-environment'
@@ -83,36 +93,12 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
     environmentId: environment.id
     configuration: {
       activeRevisionsMode: 'Multiple'
-      secrets: [
+      secrets: concat([
         {
           name: 'ghcr-read-token-ref'
           value: ghcrReadToken
-        }
-        {
-          name: 'sql-connection-ref'
-          value: sqlConnectionString
-        }
-        {
-          name: 'blobstorage-connection-ref'
-          value: blobStorageUrl
-        }
-        {
-          name: 'communication-connection-ref'
-          value: communicationConnectionString
-        }
-        {
-          name: 'email-sender-address-ref'
-          value: emailSenderAddress
-        }
-        {
-          name: 'security-key-ref'
-          value: securityKey
-        }
-        {
-          name: 'syncfusion-license-key-ref'
-          value: syncfusionLicenseKey
-        }
-      ]
+        }],
+        appSecrets)
       registries: [
         {
           server: 'ghcr.io'
@@ -136,36 +122,13 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
             cpu: json('0.25')
             memory: '.5Gi'
           }
-          env: [
+          env: concat([
             {
               name: 'AZURE_CLIENT_ID'
               value: userAssignedManagedIdentityClientId
-            }
-            {
-              name: 'ConnectionStrings__Db'
-              secretRef: 'sql-connection-ref'
-            }
-            {
-              name: 'ConnectionStrings__BlobStorage'
-              secretRef: 'blobstorage-connection-ref'
-            }
-            {
-              name: 'ConnectionStrings__Communication'
-              secretRef: 'communication-connection-ref'
-            }
-            {
-              name: 'EmailSenderAddress'
-              secretRef: 'email-sender-address-ref'
-            }
-            {
-              name: 'SecurityKey'
-              secretRef: 'security-key-ref'
-            }
-            {
-              name: 'Syncfusion__LicenseKey'
-              secretRef: 'syncfusion-license-key-ref'
-            }
-          ]
+            }],
+            env,
+            appSecretRefs)
         }
       ]
       scale: {
