@@ -1,9 +1,6 @@
 @description('Name of the Key Vault to assign the role on.')
 param keyvaultName string
 
-// @description('Name of the Key Vault to assign the role on.')
-// param resourceGroupName string = resourceGroup().name
-
 @description('Id of the Role Definition to assign')
 param roleId string
 
@@ -12,7 +9,6 @@ param principalId string
 
 resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' existing = {
   name: keyvaultName
-  //scope: resourceGroup(resourceGroupName)
 }
 
 resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
