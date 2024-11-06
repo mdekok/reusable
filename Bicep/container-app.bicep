@@ -40,7 +40,7 @@ param secrets array = []
 
 var appSecrets = [for secret in secrets: {
     name: secret.name
-    keyVaultUrl: 'https://${keyVaultName}.${az.environment().suffixes.keyvaultDns}/secrets/${secret.name}'
+    keyVaultUrl: 'https://${keyVaultName}${az.environment().suffixes.keyvaultDns}/secrets/${secret.name}'
     identity: userAssignedManagedIdentityId
   }]
 var appSecretRefs = [for secret in secrets: {
