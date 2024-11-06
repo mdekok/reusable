@@ -31,7 +31,7 @@ param env array = []
 
 // Bicep does not allow secure array parameters
 // https://github.com/Azure/bicep/issues/8733
-// Also getSecrets has restrictions, so using secretN is is a workaround for now.
+// Also getSecrets has restrictions, so using secret[N] is a workaround for now.
 @secure()
 param secret1 string = ''
 @secure()
