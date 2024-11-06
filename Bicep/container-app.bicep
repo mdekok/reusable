@@ -35,7 +35,7 @@ param keyVaultName string
 // Bicep does not allow secure array parameters
 // https://github.com/Azure/bicep/issues/8733
 // We use references to key vault secrets for now.
-@description('Secret references.')
+@description('Secret references. Properties: name (of secret), envVar (environment variable for the secret value)')
 param secrets array = []
 
 var appSecrets = [for secret in secrets: {
