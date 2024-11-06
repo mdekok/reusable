@@ -29,37 +29,25 @@ param ghcrReadToken string
 @description('Environment variables.')
 param env array = []
 
+@description('Name of Key Vault holding the secrets.')
+param keyVaultName string
+
 // Bicep does not allow secure array parameters
 // https://github.com/Azure/bicep/issues/8733
-// Also getSecrets has restrictions, so using secret[N] is a workaround for now.
-@secure()
-param secret1 string = ''
-@secure()
-param secret2 string = ''
-@secure()
-param secret3 string = ''
+// We use references to key vault secrets for now.
 @description('Secret references.')
-param secretRefs array = []
+param secrets array = []
 
-var appSecrets = [
-  {
-    name: 'secret1-ref'
-    value: secret1
-  }
-  {
-    name: 'secret2-ref'
-    value: secret2
-  }
-  {
-    name: 'secret3-ref'
-    value: secret3
-  }
-]
-var appSecretRefs = [for secret in secretRefs: {
-    name: secret.envVar
-    secretRef: '${secret.name}-ref'
+var appSecrets = [for secret in secrets: {
+    name: secret.name
+    keyVaultUrl: 'https://${keyVaultName}.${az.environment().suffixes.keyvaultDns}/secrets/${secret.name}'
+    identity: userAssignedManagedIdentityId
   }]
-
+var appSecretRefs = [for secret in secrets: {
+    name: secret.envVar
+    secretRef: secret.name
+  }]
+  
 resource environment 'Microsoft.App/managedEnvironments@2024-03-01' = {
   name: '${name}-environment'
   location: location
