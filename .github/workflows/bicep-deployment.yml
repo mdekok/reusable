@@ -13,6 +13,10 @@ on:
       environment:
         required: true
         type: string
+      version:
+        required: true
+        type: string
+        default: 'latest'
         
 jobs:
   deploy:
@@ -40,4 +44,4 @@ jobs:
           az deployment group ${{ inputs.action }} \
             --template-file ${{ inputs.filepath }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --parameters env=${{ vars.LABEL }} location=${{ vars.LOCATION }}
+            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}
