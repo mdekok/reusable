@@ -19,7 +19,7 @@ param logAnalyticsWorkspaceCustomerId string
 @description('Log Analytics Workspace name.')
 param logAnalyticsWorkspaceName string
 
-@description('Image (ghcr.io/mdekok/bsapp:{version})')
+@description('Image (ghcr.io/mdekok/{appname}:{version})')
 param image string
 
 @description('GitHub Container Registry read token.')
