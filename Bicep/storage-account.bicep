@@ -29,7 +29,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
 // Azure built-in roles: https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 
 module storageAccountRoleAssignment 'storage-account-role-assignment.bicep' = {
-  name: 'blob-storage-account-role-assignment'
+  name: '${name}-blob-storage-account-role-assignment'
   params: {
     storageAccountName: name
     roleId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe' // Storage Blob Data Contributor
@@ -38,7 +38,7 @@ module storageAccountRoleAssignment 'storage-account-role-assignment.bicep' = {
 }
 
 module funcStorageQueueAccountRoleAssignment 'storage-account-role-assignment.bicep' = {
-  name: 'queue-storage-account-role-assignment'
+  name: '${name}-queue-storage-account-role-assignment'
   params: {
     storageAccountName: name
     roleId: '974c5e8b-45b9-4653-ba55-5f855dd0fb88' // Storage Queue Data Contributor
