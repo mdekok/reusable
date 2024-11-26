@@ -131,3 +131,5 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
     }
   }
 }
+
+output serviceUrl string = containerapp.properties.configuration.ingress.fqdn
