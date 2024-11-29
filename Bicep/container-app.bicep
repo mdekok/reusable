@@ -10,7 +10,7 @@ param tags object
 @description('Id of the User Assigned Managed Identity.')
 param userAssignedManagedIdentityId string
 
-@description('Client Ud of the User Assigned Managed Identity.')
+@description('Client Id of the User Assigned Managed Identity.')
 param userAssignedManagedIdentityClientId string
 
 @description('Log Analytics Workspace Customer Id.')
