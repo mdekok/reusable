@@ -32,6 +32,9 @@ param env array = []
 @description('Name of Key Vault holding the secrets.')
 param keyVaultName string
 
+@description('Minimum replicas.')
+param minReplicas int = 0
+
 // Bicep does not allow secure array parameters
 // https://github.com/Azure/bicep/issues/8733
 // We use references to key vault secrets for now.
@@ -120,7 +123,7 @@ resource containerapp 'Microsoft.App/containerApps@2024-03-01' = {
         }
       ]
       scale: {
-        minReplicas: 0
+        minReplicas: minReplicas
       }
     }
   }
