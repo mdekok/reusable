@@ -8,5 +8,3 @@ resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@
   name: name
   location: location
 }
-
-output id string = userAssignedIdentity.id
