@@ -19,3 +19,6 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09
     workspaceCapping: {} // prevents false positive change
   }
 }
+
+output id string = logAnalyticsWorkspace.id
+output customerId string = logAnalyticsWorkspace.properties.customerId
