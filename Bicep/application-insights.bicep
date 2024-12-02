@@ -23,4 +23,3 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 output id string = applicationInsights.id
 output instrumentationKey string = applicationInsights.properties.InstrumentationKey
-output connectionString string = applicationInsights.properties.ConnectionString
