@@ -39,7 +39,7 @@ jobs:
     - name: Deployment
       uses: azure/CLI@v2
       with:
-        azcliversion: 2.63.0 # See: https://github.com/Azure/azure-cli/issues/29828
+        azcliversion: latest
         inlineScript: |
           az deployment group ${{ inputs.action }} \
             --template-file ${{ inputs.filepath }} \
