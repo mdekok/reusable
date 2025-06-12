@@ -16,6 +16,9 @@ param principalId string
 @allowed(['Standard_GRS', 'Standard_LRS'])
 param sku string
 
+@description('Specifies whether public access to blobs is allowed to be set at the container level. Default is false.')
+param allowBlobPublicAccess bool = false
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: name
   location: location
@@ -24,6 +27,9 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     name: sku
   }
   kind: 'StorageV2'
+  properties: {
+    allowBlobPublicAccess: allowBlobPublicAccess
+  }
 }
 
 // Azure built-in roles: https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
