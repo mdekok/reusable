@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
 
     - name: Build and test
       uses: mdekok/reusable/.github/actions/dotnet-build-test@v1.1.0
