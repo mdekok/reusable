@@ -44,4 +44,5 @@ jobs:
           az deployment group ${{ inputs.action }} \
             --template-file ${{ inputs.filepath }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}
+            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }} \
+            --exclude-change-types Ignore NoChange Unsupported # to reduce noise in output of what-if
