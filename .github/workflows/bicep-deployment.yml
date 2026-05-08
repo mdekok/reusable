@@ -41,8 +41,8 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          COMMON_ARGS="--template-file ${FILEPATH} \
-            --resource-group ${RESOURCE_GROUP} \
+          COMMON_ARGS="--template-file ${{ inputs.filepath }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
             --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
 
           if [ "${ACTION}" = "what-if" ]; then
