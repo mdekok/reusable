@@ -36,13 +36,20 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Set exclude-change-types argument to reduce noise in output of what-if
-      run: |
-        if [ ${{ inputs.action }} = "what-if" ]; then
-          echo "EXCLUDE=--exclude-change-types Ignore NoChange Unsupported" >> $GITHUB_ENV
-        else
-          echo "EXCLUDE=" >> $GITHUB_ENV
-        fi
+    - name: Deployment
+      uses: azure/CLI@v3
+      with:
+        azcliversion: latest
+        inlineScript: |
+          COMMON_ARGS="--template-file ${FILEPATH} \
+            --resource-group ${RESOURCE_GROUP} \
+            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
+
+          if [ "${ACTION}" = "what-if" ]; then
+            az deployment group what-if $COMMON_ARGS > what-if.txt 2>&1
+          else
+            az deployment group ${{ inputs.action }} $COMMON_ARGS
+          fi
 
     - name: Deployment
       uses: azure/CLI@v3
