@@ -45,24 +45,12 @@ jobs:
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
 
-          if [ "${ACTION}" = "what-if" ]; then
+          if [ ${{ inputs.action }} = "what-if" ]; then
             az deployment group what-if $COMMON_ARGS > what-if.txt 2>&1
           else
             az deployment group ${{ inputs.action }} $COMMON_ARGS
           fi
 
-    - name: Deployment
-      uses: azure/CLI@v3
-      with:
-        azcliversion: latest
-        inlineScript: |
-          COMMON_ARGS="--template-file ${FILEPATH} --resource-group ${RESOURCE_GROUP} --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
-
-          if [ "${ACTION}" = "what-if" ]; then
-            az deployment group what-if $COMMON_ARGS > what-if.txt
-          else
-            az deployment group ${{ inputs.action }} $COMMON_ARGS
-          fi
 #          az deployment group ${{ inputs.action }} \
 #            --template-file ${{ inputs.filepath }} \
 #            --resource-group ${{ vars.RESOURCE_GROUP }} \
