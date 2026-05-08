@@ -49,12 +49,19 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          az deployment group ${{ inputs.action }} \
-            --template-file ${{ inputs.filepath }} \
-            --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }} \
-            $EXCLUDE \
-            > what-if.txt
+          COMMON_ARGS="--template-file $FILEPATH --resource-group $RESOURCE_GROUP --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
+
+          if [ "${ACTION}" = "what-if" ]; then
+            az deployment group what-if $COMMON_ARGS > what-if.txt
+          else
+            az deployment group ${{ inputs.action }} $COMMON_ARGS
+          fi
+#          az deployment group ${{ inputs.action }} \
+#            --template-file ${{ inputs.filepath }} \
+#            --resource-group ${{ vars.RESOURCE_GROUP }} \
+#            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }} \
+#            $EXCLUDE \
+#            > what-if.txt
 
     - name: Upload what-if results as artifact
       if: inputs.action == 'what-if'
