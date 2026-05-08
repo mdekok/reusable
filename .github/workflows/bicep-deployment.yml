@@ -39,7 +39,7 @@ jobs:
     - name: Set exclude-change-types argument to reduce noise in output of what-if
       run: |
         if [ ${{ inputs.action }} = "what-if" ]; then
-          echo "EXCLUDE=--exclude-change-types Ignore NoChange Unsupported" >> $GITHUB_ENV
+          echo "EXCLUDE=--exclude-change-types Ignore NoChange Unsupported > what-if.txt" >> $GITHUB_ENV
         else
           echo "EXCLUDE=" >> $GITHUB_ENV
         fi
@@ -54,3 +54,11 @@ jobs:
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }} \
             $EXCLUDE
+
+    - name: Upload what-if results as artifact
+      if: inputs.action == 'what-if'
+      uses: actions/upload-artifact@v7
+      with:
+        name: what-if
+        path: what-if.txt
+    
