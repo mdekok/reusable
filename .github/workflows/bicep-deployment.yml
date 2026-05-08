@@ -49,7 +49,7 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          COMMON_ARGS="--template-file $FILEPATH --resource-group $RESOURCE_GROUP --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
+          COMMON_ARGS="--template-file ${FILEPATH} --resource-group ${RESOURCE_GROUP} --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
 
           if [ "${ACTION}" = "what-if" ]; then
             az deployment group what-if $COMMON_ARGS > what-if.txt
