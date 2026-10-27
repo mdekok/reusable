@@ -63,14 +63,9 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-<<<<<<< HEAD
-      - name: Deployment
-        uses: azure/bicep-deploy@v2.4.0
-=======
       - name: Deployment Stack
         if: ${{ inputs.action != 'whatIf' }}
         uses: azure/bicep-deploy@v2
->>>>>>> 6cd0501 (Use deployment type for whatIf, deploymentStack otherwise)
         with:
           type: deploymentStack
           operation: ${{ inputs.action }}
