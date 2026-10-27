@@ -63,8 +63,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deployment (stacks)
-        if: ${{ inputs.action != 'whatIf' }}
+      - name: Deployment
         uses: azure/bicep-deploy@v2
         with:
           type: deploymentStack
@@ -82,37 +81,6 @@ jobs:
           deny-settings-mode: ${{ inputs.denySettingsMode }}
           deny-settings-excluded-principals: ${{ inputs.denySettingsExcludedPrincipals }}
           description: 'GitHub ${{ github.repository }} ${{ github.sha }} (${{ inputs.filepath }})'
-
-      - name: What-If (deployment stack)
-        if: ${{ inputs.action == 'whatIf' }}
-        uses: azure/CLI@v3
-        with:
-          azcliversion: latest
-          inlineScript: |
-            set -euo pipefail
-            STACK_NAME="${{ vars.LABEL }}-${{ inputs.tag }}-deployment-stack"
-            RG="${{ vars.RESOURCE_GROUP }}"
-            SUB="${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-            STACK_ID="/subscriptions/${SUB}/resourceGroups/${RG}/providers/Microsoft.Resources/deploymentStacks/${STACK_NAME}"
-            RESULT_NAME="whatif-${STACK_NAME}-${{ github.run_id }}-${{ github.run_attempt }}"
-
-            COMMON_ARGS=(
-              --resource-group "${RG}"
-              --stack-id "${STACK_ID}"
-              --template-file "${{ inputs.filepath }}"
-              --parameters "env=${{ vars.LABEL }}" "version=${{ inputs.version }}" "location=${{ vars.LOCATION }}"
-              --action-on-unmanage "${{ inputs.actionOnUnmanageResources == 'delete' && 'deleteResources' || 'detachAll' }}"
-              --deny-settings-mode "${{ inputs.denySettingsMode }}"
-              --retention-interval "PT3H"
-              --no-color
-            )
-            if [ -n "${{ inputs.denySettingsExcludedPrincipals }}" ]; then
-              COMMON_ARGS+=(--deny-settings-excluded-principals "${{ inputs.denySettingsExcludedPrincipals }}")
-            fi
-
-            az stack-whatif group create \
-              --name "${RESULT_NAME}" \
-              "${COMMON_ARGS[@]}"
 
       - name: Summary
         if: always()
