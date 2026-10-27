@@ -22,7 +22,7 @@ on:
           Tag included in the deployment stack name. Must be a valid Azure resource-name
           segment: alphanumerics, underscore, hyphen, period or parentheses only.
           Slashes and other characters are not allowed.
-        required: true
+        required: false
         type: string
         default: 'main'
       actionOnUnmanageResources:
