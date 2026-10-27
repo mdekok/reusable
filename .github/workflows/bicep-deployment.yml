@@ -24,6 +24,7 @@ on:
           Slashes and other characters are not allowed.
         required: true
         type: string
+        default: 'main'
       actionOnUnmanageResources:
         description: 'What happens to resources removed from the template: detach or delete.'
         required: false
