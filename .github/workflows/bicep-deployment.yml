@@ -1,10 +1,10 @@
-name: Deploy Bicep file
+name: Deploy Bicep file (deployment stack)
 
 on:
   workflow_call:
     inputs:
       action:
-        description: 'Deployment action: validate, what-if or create'
+        description: 'Deployment action: validate, whatIf or create'
         required: true
         type: string
       filepath:
@@ -17,51 +17,78 @@ on:
         required: true
         type: string
         default: 'latest'
-        
+      tag:
+        description: >-
+          Tag included in the deployment stack name. Must be a valid Azure resource-name
+          segment: alphanumerics, underscore, hyphen, period or parentheses only.
+          Slashes and other characters are not allowed.
+        required: true
+        type: string
+      actionOnUnmanageResources:
+        description: 'What happens to resources removed from the template: detach or delete.'
+        required: false
+        type: string
+        default: 'detach'
+      denySettingsMode:
+        description: 'Deny settings mode: none, denyDelete or denyWriteAndDelete.'
+        required: false
+        type: string
+        default: 'none'
+      denySettingsExcludedPrincipals:
+        description: 'Comma-separated Entra object IDs excluded from deny settings (max 5).'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
 
     steps:
-    - name: Check out
-      uses: actions/checkout@v6
-      with:
-        submodules: true
+      - name: Check out
+        uses: actions/checkout@v6
+        with:
+          submodules: true
 
-    - name: Login Azure
-      uses: azure/login@v3
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Login Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Deployment
-      uses: azure/CLI@v3
-      with:
-        azcliversion: latest
-        inlineScript: |
-          COMMON_ARGS="--template-file ${{ inputs.filepath }} \
-            --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }}"
+      - name: Deployment
+        uses: azure/bicep-deploy@v2
+        with:
+          type: deploymentStack
+          operation: ${{ inputs.action }}
+          name: ${{ vars.LABEL }}-${{ inputs.tag }}-deployment-stack
+          scope: resourceGroup
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          resource-group-name: ${{ vars.RESOURCE_GROUP }}
+          template-file: ${{ inputs.filepath }}
+          parameters: |
+            env: '${{ vars.LABEL }}'
+            version: '${{ inputs.version }}'
+            location: '${{ vars.LOCATION }}'
+          action-on-unmanage-resources: ${{ inputs.actionOnUnmanageResources }}
+          deny-settings-mode: ${{ inputs.denySettingsMode }}
+          deny-settings-excluded-principals: ${{ inputs.denySettingsExcludedPrincipals }}
+          description: 'GitHub ${{ github.repository }} ${{ github.sha }} (${{ inputs.filepath }})'
 
-          if [ ${{ inputs.action }} = "what-if" ]; then
-            az deployment group what-if $COMMON_ARGS > what-if.txt 2>&1
-          else
-            az deployment group ${{ inputs.action }} $COMMON_ARGS
-          fi
-
-#          az deployment group ${{ inputs.action }} \
-#            --template-file ${{ inputs.filepath }} \
-#            --resource-group ${{ vars.RESOURCE_GROUP }} \
-#            --parameters env=${{ vars.LABEL }} version=${{ inputs.version }} location=${{ vars.LOCATION }} \
-#            $EXCLUDE \
-#            > what-if.txt
-
-    - name: Upload what-if results as artifact
-      if: inputs.action == 'what-if'
-      uses: actions/upload-artifact@v7
-      with:
-        name: what-if
-        path: what-if.txt
-    
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Deployment stack"
+            echo ""
+            echo "- Stack: \`${{ vars.LABEL }}-${{ inputs.tag }}-deployment-stack\`"
+            echo "- Scope: \`${{ vars.RESOURCE_GROUP }}\`"
+            echo "- Operation: \`${{ inputs.action }}\`"
+            echo "- Template: \`${{ inputs.filepath }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
