@@ -64,7 +64,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deployment Stack
-        uses: az ure/bicep-deploy@v2
+        uses: azure/bicep-deploy@v2
         with:
           type: deploymentStack
           operation: ${{ inputs.action }}
@@ -77,7 +77,7 @@ jobs:
             env: '${{ vars.LABEL }}'
             version: '${{ inputs.version }}'
             location: '${{ vars.LOCATION }}'
-          what-if-exclude-change-types: NoChange
+          what-if-exclude-change-types: noChange
           action-on-unmanage-resources: ${{ inputs.actionOnUnmanageResources }}
           deny-settings-mode: ${{ inputs.denySettingsMode }}
           deny-settings-excluded-principals: ${{ inputs.denySettingsExcludedPrincipals }}
