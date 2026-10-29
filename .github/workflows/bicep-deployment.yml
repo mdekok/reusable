@@ -64,7 +64,6 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deployment Stack
-        if: ${{ inputs.action != 'whatIf' }}
         uses: azure/bicep-deploy@v2
         with:
           type: deploymentStack
@@ -82,22 +81,6 @@ jobs:
           deny-settings-mode: ${{ inputs.denySettingsMode }}
           deny-settings-excluded-principals: ${{ inputs.denySettingsExcludedPrincipals }}
           description: 'GitHub ${{ github.repository }} ${{ github.sha }} (${{ inputs.filepath }})'
-
-      - name: What-If
-        if: ${{ inputs.action == 'whatIf' }}
-        uses: azure/bicep-deploy@v2
-        with:
-          type: deployment
-          operation: whatIf
-          name: ${{ vars.LABEL }}-${{ inputs.tag }}-whatif
-          scope: resourceGroup
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          resource-group-name: ${{ vars.RESOURCE_GROUP }}
-          template-file: ${{ inputs.filepath }}
-          parameters: |
-            env: '${{ vars.LABEL }}'
-            version: '${{ inputs.version }}'
-            location: '${{ vars.LOCATION }}'
 
       - name: Summary
         if: always()
