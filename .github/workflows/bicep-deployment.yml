@@ -77,7 +77,7 @@ jobs:
             env: '${{ vars.LABEL }}'
             version: '${{ inputs.version }}'
             location: '${{ vars.LOCATION }}'
-          what-if-exclude-change-types: NoChange Ignore
+          what-if-exclude-change-types: XNoChange Ignore
           action-on-unmanage-resources: ${{ inputs.actionOnUnmanageResources }}
           deny-settings-mode: ${{ inputs.denySettingsMode }}
           deny-settings-excluded-principals: ${{ inputs.denySettingsExcludedPrincipals }}
